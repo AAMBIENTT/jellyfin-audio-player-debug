@@ -30,7 +30,7 @@ jobs:
         run: |
           cd ios
           xcodebuild \
-            -workspace jellyfin-audio-player.xcworkspace \
+            -workspace jellyfin-audio-player-debug.xcworkspace \
             -scheme jellyfin-audio-player \
             -configuration Release \
             -sdk iphoneos \
