@@ -1,0 +1,38 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Install Ruby deps
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Build IPA
+        run: bundle exec fastlane ios beta
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fintunes
+          path: fastlane/build/*.ipa
