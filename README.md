@@ -80,4 +80,4 @@ This work is licensed under the MIT license and was built by Lei Nelissen.
     <img src="./docs/images/bmd-logo-icon.png" alt="BMD Studio" width="150" height="150" />
 </a>
 
-An Apple Developer license, as well as various forms of support are graciously provided for by [BMD Studio](https://bmd.studio), experts in finding creative solutions for difficult problems.
+An Apple Developer license, as well as various forms of support are graciously provided for by [BMD Studio](https://bmd.studio), experts in finding creative solutions for difficult problems. 
