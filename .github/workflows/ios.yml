@@ -29,24 +29,19 @@ jobs:
       - name: Build iOS
         run: |
           cd ios
+
+          WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+          echo "Using workspace: $WORKSPACE"
+
+          SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" | awk '/Schemes:/{getline; print $1}')
+
+          echo "Using scheme: $SCHEME"
+
           xcodebuild \
-            -workspace jellyfin-audio-player-debug.xcworkspace \
-            -scheme jellyfin-audio-player \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
             -configuration Release \
             -sdk iphoneos \
             -archivePath $PWD/build/App.xcarchive \
             archive \
             CODE_SIGNING_ALLOWED=NO
-
-      - name: Export IPA
-        run: |
-          cd ios/build
-          mkdir Payload
-          cp -r App.xcarchive/Products/Applications/*.app Payload/
-          zip -r Fintunes.ipa Payload
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: Fintunes
-          path: ios/build/Fintunes.ipa
