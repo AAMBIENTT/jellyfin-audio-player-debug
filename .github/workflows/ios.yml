@@ -2,8 +2,6 @@ name: Build iOS IPA
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   build:
@@ -23,16 +21,32 @@ jobs:
       - name: Install deps
         run: pnpm install
 
-      - name: Install Ruby deps
+      - name: Install pods
         run: |
-          gem install bundler
-          bundle install
+          cd ios
+          pod install
 
-      - name: Build IPA
-        run: bundle exec fastlane ios beta
+      - name: Build iOS
+        run: |
+          cd ios
+          xcodebuild \
+            -workspace jellyfin-audio-player.xcworkspace \
+            -scheme jellyfin-audio-player \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $PWD/build/App.xcarchive \
+            archive \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export IPA
+        run: |
+          cd ios/build
+          mkdir Payload
+          cp -r App.xcarchive/Products/Applications/*.app Payload/
+          zip -r Fintunes.ipa Payload
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: Fintunes
-          path: fastlane/build/*.ipa
+          path: ios/build/Fintunes.ipa
