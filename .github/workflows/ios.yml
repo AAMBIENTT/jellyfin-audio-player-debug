@@ -45,3 +45,13 @@ jobs:
             -archivePath $PWD/build/App.xcarchive \
             archive \
             CODE_SIGNING_ALLOWED=NO
+      - name: Export IPA
+        run: |
+          cd ios
+
+          mkdir -p export
+
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportPath export \
+            -exportOptionsPlist ../exportOptions.plist
